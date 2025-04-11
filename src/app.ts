@@ -1,4 +1,5 @@
 import express from 'express';
+<<<<<<< HEAD
 import cors from 'cors';
 import pool from './config/db';
 
@@ -28,5 +29,18 @@ app.get('/api/healthcheck', (req, res) => {
   });
 
 // app.use('/api/v1', exampleRoutes);
+=======
+import { errorHandler } from './middlewares/errorHandler';
+import itemRouter from './routes/itemRoutes';
+
+
+const app = express();
+
+app.use(express.json())
+
+app.use('api/items', itemRouter)
+
+app.use(errorHandler)
+>>>>>>> 4be350b (added express)
 
 export default app;
