@@ -3,9 +3,9 @@
   "description": "backend for my react todo app",
   "main": "index.js",
   "scripts": {
-      "dev": "ts-node src/server.ts",
-      "build": "tsc",
-      "start": "npm run build && node dist/server.js"
+    "dev": "ts-node src/server.ts",
+    "build": "tsc",
+    "start": "npm run build && node dist/server.js"
   },
   "repository": {
     "type": "git",
@@ -32,6 +32,10 @@
   },
   "dependencies": {
     "@prisma/client": "^6.6.0",
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.9",
+    "bcrypt-ts": "^6.0.0",
+    "jsonwebtoken": "^9.0.2",
     "pg": "^8.14.1"
   }
 }
