@@ -1,6 +1,7 @@
 import express from 'express';
 import { NotFoundException } from './exceptions/http.exception';
 import authRouter from './routes/auth.router';
+import { errorMiddleware } from './middlewares/error.middleware';
 
 const app = express();
 
@@ -12,5 +13,6 @@ app.use('/api', authRouter)
 app.use((req, res, next) => {
     next(new NotFoundException('Endpoint not found'));
   });
+app.use(errorMiddleware);
 
 export default app;
