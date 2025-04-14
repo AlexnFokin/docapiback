@@ -1,21 +1,5 @@
 {
-<<<<<<< HEAD
     "compilerOptions": {
-      "target": "ES6",
-      "module": "commonjs",
-      "outDir": "./dist",
-      "rootDir": "./src",
-      "strict": true,
-      "esModuleInterop": true,
-      "noImplicitAny": true,
-      "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true
-    },
-    "include": ["src/**/*"],
-    "exclude": ["node_modules"]
-  }
-=======
-  "compilerOptions": {
     "target": "ES2022",
     "module": "commonjs",
     "outDir": "./dist",
@@ -25,8 +9,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node"
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"]
-}
->>>>>>> 4be350b (added express)
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules"]
+}  
