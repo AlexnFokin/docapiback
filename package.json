@@ -36,7 +36,13 @@
     "start": "node dist/server.js",
     "dev": "nodemon src/server.ts",
     "lint:ts": "npx eslint '**/*.{ts}'",
-    "lint:ts:fix": "npx eslint '**/*.{ts}' --fix"
+    "lint:ts:fix": "npx eslint '**/*.{ts}' --fix",
+    "format": "prettier --write .",
+    "migrate": "npx prisma migrate dev",
+    "generate": "npx prisma generate",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up",
+    "docker:down": "docker-compose down"
   },
   "repository": {
     "type": "git",
@@ -56,6 +62,7 @@
     "nodemon": "^3.1.9",
     "npm": "^11.3.0",
     "prettier": "^3.5.3",
+    "prisma": "^6.6.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.29.1"

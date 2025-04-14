@@ -1,5 +1,6 @@
 import express from 'express';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import cors from 'cors';
 import pool from './config/db';
 
@@ -31,6 +32,10 @@ app.get('/api/healthcheck', (req, res) => {
 // app.use('/api/v1', exampleRoutes);
 =======
 import { errorHandler } from './middlewares/errorHandler';
+=======
+import { NotFoundException } from './exceptions/http.exception';
+import { errorMiddleware } from './middlewares/error.middleware';
+>>>>>>> 1ff89ae (added test route)
 import itemRouter from './routes/itemRoutes';
 
 
@@ -38,9 +43,16 @@ const app = express();
 
 app.use(express.json())
 
-app.use('api/items', itemRouter)
+app.use('/api/items', itemRouter)
 
+<<<<<<< HEAD
 app.use(errorHandler)
 >>>>>>> 4be350b (added express)
+=======
+app.use((req, res, next) => {
+    next(new NotFoundException('Endpoint not found'));
+  });
+  app.use(errorMiddleware);
+>>>>>>> 1ff89ae (added test route)
 
 export default app;
