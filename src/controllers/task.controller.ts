@@ -1,12 +1,19 @@
-import { TaskService } from "../services/task.service";
 import { Request, Response } from 'express';
+import { MyJwtPayload } from "../types/jwt";
+import { TaskService } from '../services/task.service';
+
+
+interface AuthRequest extends Request {
+    user?: MyJwtPayload; 
+  }
 
 class TaskController {
     taskService: TaskService;
-
+   
     constructor() {
-        this.taskService = new TaskService;
+      this.taskService = new TaskService;
     }
+
     getAll = async (req: Request, res: Response): Promise<void> => {
         try {
           
@@ -37,20 +44,31 @@ class TaskController {
         }
     };
 
-    create = async (req: Request, res: Response): Promise<void> => {
+    create = async (req: AuthRequest, res: Response): Promise<void> => {
         try {
-            const { title, content, authorId } = req.body;
-            if (!title || !authorId) {
-                res.status(400).json({ message: 'Title and Author ID are required' });
-                return;
-            }
-
-            const newTask = await this.taskService.create({ title, content, authorId });
-            res.status(201).json({ task: newTask });
+          const { title, content } = req.body;
+    
+          if (!title) {
+            res.status(400).json({ message: 'Title is required' });
+            return;
+          }
+    
+          if (!req.user?.id) {
+            res.status(403).json({ message: 'Unauthorized: user ID not found' });
+            return;
+          }
+    
+          const newTask = await this.taskService.create({
+            title,
+            content,
+            authorId: req.user.id  
+          });
+     
+          res.status(201).json({ task: newTask });
         } catch (error) {
-            res.status(400).json({ message: error instanceof Error ? error.message : 'Error creating task' });
+          res.status(500).json({ message: error instanceof Error ? error.message : 'Internal Server Error' });
         }
-    };
+      }
 
     update = async (req: Request, res: Response): Promise<void> => {
         try {
