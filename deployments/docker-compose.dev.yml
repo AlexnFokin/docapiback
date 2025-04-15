@@ -1,0 +1,17 @@
+services:
+  server:
+    build:
+      context: ..
+      dockerfile: deployments/Dockerfile.dev
+    ports:
+      - "5000:5000"
+    volumes:
+      - ../:/app
+      - /app/node_modules
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    env_file:
+      - ../.env
+    networks:
+      - prisma-network

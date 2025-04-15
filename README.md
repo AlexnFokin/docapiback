@@ -37,3 +37,36 @@ The API is documented using **Swagger**.
 Swagger UI is available at:
 
 [Swagger UI — Open API Docs](http://localhost:5000/api-docs)
+
+
+# Docker Workflow for Development and Production
+
+## Development Mode (🔥)
+
+### Command from the Root Directory:
+```bash
+docker compose -f deployments/docker-compose.yml -f deployments/docker-compose.dev.yml up --build
+
+
+docker compose -f deployments/docker-compose.yml -f deployments/docker-compose.prod.yml up --build
+
+---
+
+- **🔥 Development Mode**: Focuses on running with hot-reload and a Dockerized database. This helps during development, as changes are reflected without rebuilding the container each time.
+  
+- **🚀 Production Mode**: Designed for production with optimized settings. It builds the application without mounting files directly, making it suitable for deployment environments.
+
+- **Accessing the Container**: Once the services are up, you can access the container for interactive management, for example, running migrations with Prisma.
+
+Common Commands & Flags
+Build Flags:
+--build → Shows build progress and forces image rebuilding
+
+-d → Detached mode (runs in background)
+
+Container Access:
+
+    docker compose exec -it server sh
+
+npx prisma migrate dev
+
