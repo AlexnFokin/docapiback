@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
+import { jwt_secret } from '../config/config';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'supersecret';
+const JWT_SECRET = jwt_secret
 
 interface Payload {
   id: number;
@@ -8,7 +9,7 @@ interface Payload {
 }
 
 export const generateToken = (payload: Payload): string => {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: '8h' });
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
