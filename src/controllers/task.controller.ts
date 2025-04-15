@@ -127,7 +127,7 @@ class TaskController {
             }
 
             await this.taskService.delete(id);
-            res.status(204).send(); // No Content
+            res.status(204).send(); 
         } catch (error) {
             res.status(400).json({ message: error instanceof Error ? error.message : 'Error deleting task' });
         }
