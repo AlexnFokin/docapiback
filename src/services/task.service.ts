@@ -1,11 +1,11 @@
-import { Task } from "@prisma/client";
-import { TaskRepository } from "../repositories/task.repository";
+import { Task } from '@prisma/client';
+import { TaskRepository } from '../repositories/task.repository';
 
 class TaskService {
     taskRepository: TaskRepository;
 
     constructor() {
-        this.taskRepository = new TaskRepository;
+        this.taskRepository = new TaskRepository();
     }
 
     async getAll() {
@@ -16,11 +16,18 @@ class TaskService {
         return this.taskRepository.getOneById(id);
     }
 
-    async create(data: { title: string; content?: string; authorId: number }): Promise<Task> {
+    async create(data: {
+        title: string;
+        content?: string;
+        authorId: number;
+    }): Promise<Task> {
         return this.taskRepository.create(data);
     }
 
-    async update(id: number, data: Partial<{ title: string; content?: string; completed?: boolean }>): Promise<Task> {
+    async update(
+        id: number,
+        data: Partial<{ title: string; content?: string; completed?: boolean }>,
+    ): Promise<Task> {
         return this.taskRepository.update(id, data);
     }
 
@@ -28,4 +35,4 @@ class TaskService {
         return this.taskRepository.delete(id);
     }
 }
-export {TaskService};
+export { TaskService };

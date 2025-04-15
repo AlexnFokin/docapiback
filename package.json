@@ -6,7 +6,11 @@
     "dev": "ts-node src/server.ts",
     "watch": "nodemon src/server.ts",
     "build": "tsc",
-    "start": "npm run build && node dist/server.js"
+    "start": "npm run build && node dist/server.js",
+    "lint:ts": "npx eslint '**/*.{ts,tsx}'",
+    "lint:ts:fix": "npx eslint '**/*.{ts,tsx}' --fix",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,md}\"",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,md}\""
   },
   "repository": {
     "type": "git",

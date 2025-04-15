@@ -8,25 +8,25 @@ const PORT = config.port;
 const serverUrl = `http://localhost:${PORT}`;
 
 const options: swaggerJSDoc.Options = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'Backend API',
-      version: '1.0.0',
-      description: 'Api documentation'
+    definition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'Backend API',
+            version: '1.0.0',
+            description: 'Api documentation',
+        },
+        servers: [
+            {
+                url: serverUrl,
+                description: 'server',
+            },
+        ],
     },
-    servers: [
-      {
-        url: serverUrl,
-        description: 'server'
-      }
-    ]
-  },
-  apis: ['./src/routes/*.ts', './src/controllers/*.ts'],
+    apis: ['./src/routes/*.ts', './src/controllers/*.ts'],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
 
 export const setupSwagger = (app: Express): void => {
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 };

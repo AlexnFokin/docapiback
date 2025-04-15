@@ -1,8 +1,8 @@
-import { Router } from "express";
-import { TaskController } from "../controllers/task.controller";
+import { Router } from 'express';
+import { TaskController } from '../controllers/task.controller';
 
 const taskRouter = Router();
-const taskController = new TaskController;
+const taskController = new TaskController();
 
 /**
  * @swagger
