@@ -12,8 +12,10 @@ class AuthController {
 
     public async register(req: Request, res: Response): Promise<void> {
         try {
-            const token = await this.authService.register(req.body);
-            res.status(201).json({ token });
+            const userData = await this.authService.register(req.body);
+            res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
+
+            res.status(201).json({ userData });
         } catch (error) {
             res.status(400).json({
                 message:

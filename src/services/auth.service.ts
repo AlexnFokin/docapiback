@@ -1,10 +1,11 @@
 import UserRepository from '../repositories/user.repository';
-import { AuthDTO } from '../types/user';
+import { AuthDTO, UserCreateDTO } from '../types/user';
 import { generateToken } from '../utils/jwt';
 import { compareSync, hashSync } from 'bcrypt-ts';
 import { v4 as uuidv4 } from 'uuid';
 import { EmailService } from './email.service';
 import { TokenService } from './token.service';
+import { User } from '@prisma/client';
 
 class AuthService {
     private userRepository: UserRepository;
@@ -17,7 +18,7 @@ class AuthService {
         this.tokenService = new TokenService();
     }
 
-    public async register({ email, password }: AuthDTO): Promise<string> {
+    public async register({ email, password, name}: UserCreateDTO): Promise<{accessToken: string, refreshToken: string, user: User}> {
         const existingUser = await this.userRepository.findByEmail(email);
         if (existingUser) throw new Error('User already exists');
 
@@ -27,6 +28,7 @@ class AuthService {
 
         const user = await this.userRepository.create({
             email,
+            name,
             password: hashedPassword,
             activationLink: activationLink,
         });
@@ -40,7 +42,13 @@ class AuthService {
         };
         const tokens = this.tokenService.generateTokens({ ...userDto });
         await this.tokenService.saveToken(user.id, tokens.refreshToken);
-        return generateToken({ id: user.id, email: user.email });
+
+        return {
+            ...tokens,
+            user
+        }
+
+        // return generateToken({ id: user.id, email: user.email });
     }
 
     public async login({ email, password }: AuthDTO): Promise<string> {
