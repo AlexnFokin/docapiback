@@ -1,18 +1,31 @@
 import { Request, Response } from 'express';
 import AuthService from '../services/auth.service';
 import { client_url } from '../config/config';
+import { validationResult } from 'express-validator';
+import { NextFunction } from 'express-serve-static-core';
+import { HttpException } from '../exceptions/http.exception';
 
 class AuthController {
     private authService: AuthService;
 
     constructor() {
         this.authService = new AuthService();
-        this.register = this.register.bind(this);
-        this.login = this.login.bind(this);
     }
 
-    public async register(req: Request, res: Response): Promise<void> {
+    register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
+
+            const errors = validationResult(req)
+
+            if (!errors.isEmpty()) {
+               return next(new HttpException(        
+                    400,
+                    'Validation failed',
+                    'VALIDATION_ERROR',
+                    errors.array() 
+                ));
+            }
+
             const userData = await this.authService.register(req.body);
             res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
 
@@ -27,7 +40,7 @@ class AuthController {
         }
     }
 
-    public async login(req: Request, res: Response): Promise<void> {
+    login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const token = await this.authService.login(req.body);
             res.status(200).json({ token });
@@ -36,16 +49,17 @@ class AuthController {
                 message:
                     error instanceof Error ? error.message : 'Login failed',
             });
+            next();
         }
     }
 
-    activate = async (req: Request, res: Response): Promise<void> => {
+    activate = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const activaitonLink = req.params.link
             await this.authService.activate(activaitonLink)
             return res.redirect(client_url);
         } catch (error) {
-            console.log(error)
+           next(error)
         }
 
     }

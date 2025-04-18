@@ -7,6 +7,7 @@ import { EmailService } from './email.service';
 import { TokenService } from './token.service';
 import { User } from '@prisma/client';
 import { api_url } from '../config/config';
+import { NotFoundException, BadRequestException } from '../exceptions/http.exception';
 
 class AuthService {
     private userRepository: UserRepository;
@@ -19,12 +20,14 @@ class AuthService {
         this.tokenService = new TokenService();
     }
 
-    public async register({ email, password, name}: UserCreateDTO): Promise<{accessToken: string, refreshToken: string, user: User}> {
+    public async register({ email, password, name }: UserCreateDTO): Promise<{ accessToken: string, refreshToken: string, user: User }> {
         const existingUser = await this.userRepository.findByEmail(email);
-        if (existingUser) throw new Error('User already exists');
+
+        if (existingUser) {
+            throw new BadRequestException('User already exists');
+        }
 
         const hashedPassword = await hashSync(password, 10);
-
         const activationLink = uuidv4();
 
         const user = await this.userRepository.create({
@@ -35,27 +38,35 @@ class AuthService {
         });
 
         await this.emailService.sendActivationEmail(email, `${api_url}/api/auth/activate/${activationLink}`);
+
         const userDto = {
             id: user.id,
             email: email,
             role: user.role,
             activated: false,
         };
+
         const tokens = this.tokenService.generateTokens({ ...userDto });
         await this.tokenService.saveToken(user.id, tokens.refreshToken);
 
         return {
             ...tokens,
             user
-        }
+        };
     }
 
     public async login({ email, password }: AuthDTO): Promise<string> {
         const user = await this.userRepository.findByEmail(email);
-        if (!user) throw new Error('Invalid credentials');
+
+        if (!user) {
+            throw new BadRequestException('Invalid credentials');
+        }
 
         const isMatch = await compareSync(password, user.password);
-        if (!isMatch) throw new Error('Invalid credentials');
+
+        if (!isMatch) {
+            throw new BadRequestException('Invalid credentials');
+        }
 
         return generateToken({ id: user.id, email: user.email });
     }
@@ -64,18 +75,17 @@ class AuthService {
         const user = await this.userRepository.findByActivationLink(activationLink);
 
         if (!user) {
-            throw new Error('incorrect activation link')
+            throw new NotFoundException('Incorrect activation link');
         }
 
-        user.isActivated = true
-        const updatedUser = await this.userRepository.update(user.id, {isActivated: true})
-        
-        if (updatedUser) {
-            await this.emailService.sendSuccessActivationLetter(user.email);
-        } else {
-            throw new Error('Failed to update user activation status');
+        user.isActivated = true;
+        const updatedUser = await this.userRepository.update(user.id, { isActivated: true });
+
+        if (!updatedUser) {
+            throw new BadRequestException('Failed to update user activation status');
         }
 
+        await this.emailService.sendSuccessActivationLetter(user.email);
         return updatedUser;
     }
 }
