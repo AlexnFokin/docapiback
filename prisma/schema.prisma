@@ -18,7 +18,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   isActivated Boolean @default(false)
-  activationLink String
+  activationLink String @unique
 
   @@map("users") 
 }

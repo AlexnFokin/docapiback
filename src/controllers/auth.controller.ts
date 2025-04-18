@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import AuthService from '../services/auth.service';
+import { client_url } from '../config/config';
 
 class AuthController {
     private authService: AuthService;
@@ -38,10 +39,18 @@ class AuthController {
         }
     }
 
+    activate = async (req: Request, res: Response): Promise<void> => {
+        try {
+            const activaitonLink = req.params.link
+            await this.authService.activate(activaitonLink)
+            return res.redirect(client_url);
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+
     public async logout(req: Request, res: Response): Promise<void> {}
-
-    public async activate(req: Request, res: Response): Promise<void> {}
-
     public async refresh(req: Request, res: Response): Promise<void> {}
 }
 

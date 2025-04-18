@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { EmailService } from './email.service';
 import { TokenService } from './token.service';
 import { User } from '@prisma/client';
+import { api_url } from '../config/config';
 
 class AuthService {
     private userRepository: UserRepository;
@@ -33,7 +34,7 @@ class AuthService {
             activationLink: activationLink,
         });
 
-        await this.emailService.sendActivationEmail(email, activationLink);
+        await this.emailService.sendActivationEmail(email, `${api_url}/api/auth/activate/${activationLink}`);
         const userDto = {
             id: user.id,
             email: email,
@@ -47,8 +48,6 @@ class AuthService {
             ...tokens,
             user
         }
-
-        // return generateToken({ id: user.id, email: user.email });
     }
 
     public async login({ email, password }: AuthDTO): Promise<string> {
@@ -59,6 +58,18 @@ class AuthService {
         if (!isMatch) throw new Error('Invalid credentials');
 
         return generateToken({ id: user.id, email: user.email });
+    }
+
+    public async activate(activationLink: string) {
+        const user = await this.userRepository.findByActivationLink(activationLink);
+
+        if (!user) {
+            throw new Error('incorrect activation link')
+        }
+
+        user.isActivated = true
+        const updatedUser = await this.userRepository.update(user.id, {isActivated: true})
+        return updatedUser;
     }
 }
 

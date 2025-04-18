@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 import { UserCreateDTO } from '../types/user';
 
 class UserRepository {
@@ -14,6 +14,17 @@ class UserRepository {
 
     public async create(data: UserCreateDTO) {
         return this.prisma.user.create({ data });
+    }
+
+    public async findByActivationLink(activationLink: string) {
+        return this.prisma.user.findUnique({where: { activationLink }})
+    }
+
+    public async update(id: number, data: Partial<User>) {
+        return this.prisma.user.update({
+            where: {id},
+            data: data
+        })
     }
 }
 

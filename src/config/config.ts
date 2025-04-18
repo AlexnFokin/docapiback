@@ -18,4 +18,11 @@ export const jwt_access_secret =
 export const jwt_refresh_secret =
     process.env.JWT_REFRESH_SECRET || 'refresh_secret';
 
+export const smtp_host = process.env.SMTP_HOST || 'smtp_host';
+export const smtp_port = process.env.SMTP_PORT || 'smtp_port';
+export const smtp_user = process.env.SMTP_USER || 'smtp_user';
+export const smtp_password = process.env.SMTP_PASSWORD || 'smtp_password';
+export const api_url = process.env.API_URL || 'api_url'
+export const client_url = process.env.CLIENT_URL || 'client_url'
+
 export default config;
