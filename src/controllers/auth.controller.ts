@@ -35,6 +35,12 @@ class AuthController {
             });
         }
     }
+
+    public async logout(req: Request, res: Response): Promise<void> {}
+
+    public async activate(req: Request, res: Response): Promise<void> {}
+
+    public async refresh(req: Request, res: Response): Promise<void> {}
 }
 
 export default AuthController;

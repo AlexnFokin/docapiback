@@ -6,10 +6,12 @@ import { taskRouter } from './routes/task.routes';
 import { authMiddleware } from './middlewares/auth.middleware';
 import { setupSwagger } from './config/swagger';
 import config from './config/config';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use('/api', authRouter);
 

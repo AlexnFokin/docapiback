@@ -87,8 +87,55 @@ authRouter.post('/auth/login', authController.login);
  *       200:
  *         description: Successfully retrieved user profile
  *       401:
- *         description: Unauthorized, invalid or missing token
+ *         description: Unauthorized, invalid or missis
  */
-// authRouter.get('/auth/profile', authMiddleware, authController.profile);
+
+/**
+ * @swagger
+ * /auth/logout:
+ * post:
+ *  summary: Post for logout
+ *  tags: [Authentication]
+ *  security:
+ *   - bearerAuth: []
+ *  responses:
+ *       200:
+ *         description: Successfully logout
+ *       401:
+ *         description: Bad
+ */
+authRouter.post('/auth/logout', authController.logout);
+
+/**
+ * @swagger
+ * /auth/activate:
+ * get:
+ *  summary: Get for activation
+ *  tags: [Authentication]
+ *  security:
+ *   - bearerAuth: []
+ *  responses:
+ *       200:
+ *         description: Successfully logout
+ *       401:
+ *         description: Bad
+ */
+authRouter.get('/auth/activate/:link', authController.activate);
+
+/**
+ * @swagger
+ * /auth/refresh:
+ * get:
+ *  summary: refresh token
+ *  tags: [Authentication]
+ *  security:
+ *   - bearerAuth: []
+ *  responses:
+ *       200:
+ *         description: Successfully logout
+ *       401:
+ *         description: Bad
+ */
+authRouter.get('/auth/refresh', authController.refresh);
 
 export default authRouter;

@@ -13,5 +13,9 @@ const config: Config = {
 };
 
 export const jwt_secret = process.env.JWT_SECRET || 'default_secret';
+export const jwt_access_secret =
+    process.env.JWT_ACCESS_SECRET || 'access_secret';
+export const jwt_refresh_secret =
+    process.env.JWT_REFRESH_SECRET || 'refresh_secret';
 
 export default config;

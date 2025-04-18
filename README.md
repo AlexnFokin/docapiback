@@ -70,3 +70,4 @@ Container Access:
 
 npx prisma migrate dev
 
+ docker exec -it deployments-postgres_db-1 psql -U postgres
