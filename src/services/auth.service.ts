@@ -69,6 +69,13 @@ class AuthService {
 
         user.isActivated = true
         const updatedUser = await this.userRepository.update(user.id, {isActivated: true})
+        
+        if (updatedUser) {
+            await this.emailService.sendSuccessActivationLetter(user.email);
+        } else {
+            throw new Error('Failed to update user activation status');
+        }
+
         return updatedUser;
     }
 }

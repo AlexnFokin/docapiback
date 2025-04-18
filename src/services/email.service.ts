@@ -31,6 +31,21 @@ class EmailService {
             `
       })
     }
+
+    public async sendSuccessActivationLetter(to: string): Promise<void> {
+        await this.transporter.sendMail({
+            from: smtp_user,
+            to,
+            "subject": "You register was successful",
+            'text': '',
+            html: 
+            `
+             <div>
+            <h1>You register was succesful</h1>
+            </div>
+            `
+        })
+    }
 }
 
 export { EmailService };
