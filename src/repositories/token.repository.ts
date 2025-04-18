@@ -21,6 +21,14 @@ class TokenRepository {
             data: { refreshToken },
         });
     }
+
+    public async removeToken(refreshToken: string) {
+        return await this.prisma.token.delete({where: {'refreshToken': refreshToken}})
+    }
+
+    public async getToken(refreshToken: string) {
+        return await this.prisma.token.findUnique({where: {refreshToken}})
+    }
 }
 
 export { TokenRepository };

@@ -30,3 +30,9 @@ export class InternalErrorException extends HttpException {
         super(500, message, code);
     }
 }
+
+export class AuthorizationError extends HttpException {
+    constructor(message = 'Authorized error', code = 'AUTHORIZATION_ERROR') {
+        super(401, message, code)
+    }
+}

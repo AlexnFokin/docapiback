@@ -26,6 +26,14 @@ class UserRepository {
             data: data
         })
     }
+
+    public async findById(id: number) {
+        return this.prisma.user.findUnique({where: {id}})
+    }
+
+    public async getAll() {
+        return this.prisma.user.findMany();
+    }
 }
 
 export default UserRepository;

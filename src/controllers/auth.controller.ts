@@ -42,8 +42,11 @@ class AuthController {
 
     login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            const token = await this.authService.login(req.body);
-            res.status(200).json({ token });
+      
+            const userData = await this.authService.login(req.body);
+            res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
+
+            res.status(201).json({ userData });
         } catch (error) {
             res.status(401).json({
                 message:
@@ -64,8 +67,40 @@ class AuthController {
 
     }
 
-    public async logout(req: Request, res: Response): Promise<void> {}
-    public async refresh(req: Request, res: Response): Promise<void> {}
+    logout = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+
+        try {
+            const {refreshToken} = req.cookies;
+            const token = await this.authService.logout(refreshToken);
+            res.clearCookie('refreshToken');
+            res.json(token);
+        } catch (error) {
+            next(error);
+        }
+
+    }
+    refresh = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const {refreshToken} = req.cookies;
+
+            const userData = await this.authService.refresh(refreshToken);
+            res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
+            res.json(userData);
+
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    getUsers = async (req: Request, res: Response, next: NextFunction) => {
+        
+        try {
+            const users = await this.authService.getUsers();
+            res.json(users)
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 export default AuthController;

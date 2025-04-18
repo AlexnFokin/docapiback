@@ -1,12 +1,12 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import { MyJwtPayload } from '../types/jwt';
+import { jwt_access_secret } from '../config/config';
 
 interface AuthRequest extends Request {
     user?: MyJwtPayload;
 }
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your_secret_key';
 
 export const authMiddleware = (
     req: AuthRequest,
@@ -30,7 +30,7 @@ export const authMiddleware = (
             return;
         }
 
-        const decoded = jwt.verify(token, JWT_SECRET) as MyJwtPayload;
+        const decoded = jwt.verify(token, jwt_access_secret) as MyJwtPayload;
 
         if (!decoded || typeof decoded !== 'object' || !decoded.id) {
             res.status(401).json({ message: 'Invalid token payload' });
