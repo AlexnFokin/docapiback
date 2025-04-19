@@ -5,13 +5,18 @@ import { errorMiddleware } from './middlewares/error.middleware';
 import { taskRouter } from './routes/task.routes';
 // import { authMiddleware } from './middlewares/auth.middleware';
 import { setupSwagger } from './config/swagger';
-import config from './config/config';
+import config, { client_url } from './config/config';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors({
+    credentials: true,
+    origin: client_url
+}))
 
 app.use('/api', authRouter);
 

@@ -29,7 +29,7 @@ class AuthController {
             const userData = await this.authService.register(req.body);
             res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
 
-            res.status(201).json({ userData });
+            res.status(201).json({ ...userData });
         } catch (error) {
             res.status(400).json({
                 message:
@@ -46,7 +46,7 @@ class AuthController {
             const userData = await this.authService.login(req.body);
             res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
 
-            res.status(201).json({ userData });
+            res.status(201).json({ ...userData });
         } catch (error) {
             res.status(401).json({
                 message:

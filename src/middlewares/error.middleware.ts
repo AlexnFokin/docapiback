@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, Response, NextFunction } from 'express';
 import { AppError } from '../interfaces/app-error.interface';
 import { HttpException } from '../exceptions/http.exception';
@@ -10,6 +9,10 @@ export const errorMiddleware = (
     next: NextFunction,
 ) => {
     console.error('[Error]', err);
+
+    if (res.headersSent) {
+        return next(err);
+    }
 
     const error = normalizeError(err);
     const statusCode = determineStatusCode(error);
